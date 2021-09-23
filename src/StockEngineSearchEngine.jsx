@@ -1,4 +1,4 @@
-import React, { useState, useEffectf } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
@@ -6,6 +6,16 @@ const InputInstruction = styled.span``
 const InputWrapper = styled.div``
 const InputArea = styled.input``
 const OutputContainer = styled.div``
+
+const ERROR_RESPONSE = {
+  count: 1,
+  result: [
+    {    
+      "description": "Something is wrong, please try again later",
+      "symbol": "ERROR",
+    }
+  ]
+}
 
 const stockApi = async (userInput, cancelToken) => {
   if (!userInput) {
@@ -16,7 +26,12 @@ const stockApi = async (userInput, cancelToken) => {
   }
 
   const URL = `https://us-central1-eng-interview.cloudfunctions.net/stock-api-proxy?q=${userInput}`
-  const result = await axios.get(URL, { cancelToken: cancelToken.token })
+  let result
+  try {
+    result = await axios.get(URL, { cancelToken: cancelToken.token })
+  } catch {
+    result = {data: ERROR_RESPONSE};
+  }
   return result?.data;
 }
 
@@ -42,6 +57,7 @@ const StockEngineSearchEngine = () => {
       stockRespons = await stockApi(userInput, cancelToken);
     } catch {
       // swallow it
+      console.log("!!!!! something is wrong");
     }
     const stockResponsClean = stockRespons?.result?.map(each => {
       return {
