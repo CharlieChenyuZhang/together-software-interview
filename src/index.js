@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App.jsx";
+import StockEngineSearchEngine from "./StockEngineSearchEngine.jsx";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StockEngineSearchEngine />
   </React.StrictMode>,
   document.getElementById("root")
 );
